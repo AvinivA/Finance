@@ -295,6 +295,61 @@ OTHER = {
     "Benchmark": ["NIFTY SMLCAP 250"],
     "Funds": {
         "Edelweiss Recently Listed IPO Fund Direct Plan Growth":"Edelweiss Recent IPO",
+        "Kotak Special Opportunities Fund - Direct Plan - Growth Option":"Kotak Special Opp"
+    }
+}
+
+BUSINESS_CYCLE = {
+    "Benchmark": ["NFTY 500"],
+    "Funds": {
+        "Axis Business Cycles Fund - Direct Plan - Growth": "Axis Business Cycle",
+        "Edelweiss Business Cycle Fund - Direct Plan - Growth": "Edelweiss Business Cycle",
+        "Kotak Business Cycle - Direct Plan - Growth": "Kotak Business Cycle",
+        "Invesco India Business Cycle Fund - Direct Plan - Growth": "Invesco Business Cycle",
+        "Sundaram Business Cycle Fund Direct Plan Growth": "Sundaram Business Cycle",
+        "Bandhan Business Cycle Fund - Direct Plan - Growth": "Bandhan Business Cycle",
+        "quant Business Cycle Fund - Growth Option - Direct Plan": "Quant Business Cycle",
+        "Motilal Oswal Business Cycle Fund - Direct Plan- Growth": "Motilal Business Cycle",
+        "ICICI Prudential Business Cycle Fund Direct Plan Growth": "ICICI Business Cycle",
+        "Tata Business Cycle Fund-Direct Plan-Growth": "Tata Business Cycle",
+        "HDFC Business Cycle Fund - Growth Option": "HDFC Business Cycle",
+        "Aditya Birla Sun Life Business Cycle Fund-Direct Growth": "Aditya Birla Business Cycle",
+    }
+}
+
+INTERNATIONAL = {
+    "Benchmark": ["NIFTY 500"],
+    "Funds": {
+        "Edelweiss US Technology Equity Fund of Fund- Direct Plan- Growth": "Edelweiss US Tech",
+        "Edelweiss Greater China Equity Off-shore Fund - Direct Plan - Growth Option": "Edelweiss China Equity",
+        "Edelweiss US Value Equity Offshore Fund - Direct Plan - Growth Option": "Edelweiss US Value Equity",
+        "Edelweiss Europe Dynamic Equity Offshore Fund - Growth Option - Direct Plan": "Edelweiss Europe Dynamic Equity",
+        "Edelweiss Emerging Markets Opportunities Equity Offshore Fund - Direct Plan - Growth Option": "Edelweiss Emerging Market",
+        "Edelweiss ASEAN Equity Off-shore Fund - Direct Plan - Growth Option": "Edelweiss ASEAN Equity",
+        
+        "Invesco India - Invesco EQQQ Nasdaq-100 ETF Fund of Fund - Direct Plan - Growth": "Invesco EQQQ Nasdaq 100",
+        "Invesco India - Invesco Global Consumer Trends Fund of Fund - Direct Plan - Growth": "Invesco Global Consumer",
+        "Invesco India - Invesco Global Equity Income Fund of Fund - Direct Plan - Growth": "Invesco Global Equity",
+        "Invesco India - Invesco Pan European Equity Fund of Fund - Direct Plan - Growth Option": "Invesco Europe Equity",
+        
+        "Franklin U.S. Opportunities Equity Active Fund of Funds - Direct - Growth": "Franklin US Opp",
+        
+        "Kotak US Equity Fund - Direct Plan - Growth option": "Kotak US Equities",
+        "Kotak International REIT Overseas Equity Omni FOF - Direct Plan - Growth": "Kotak Int. REIT",
+        "Kotak Global Innovation Overseas Equity Omni FOF- Direct Plan -Growth": "Kotak Global Innov",
+        "Kotak Global Emerging Market overseas Equity Omni FOF - Growth - Direct": "Kotak Global Emerg Market",
+
+        "Axis US Specific Equity Passive FOF - Direct Plan - Growth": "Axis US Equity",
+        "Axis Greater China Equity Fund of Fund - Direct Plan - Growth Option": "Axis Greater China",
+        "Axis Global Innovation Fund of Fund - Direct Plan - Growth": "Axis Global Innov",
+        "Axis Global Equity Alpha Fund of Fund - Direct Plan - Growth Option": "Axis Global Alpha",
+        
+        "Sundaram Global Brand Theme-Equity Active FOF - Direct Growth": "Sundaram Global Brand",
+
+        "Baroda BNP Paribas Aqua Fund of Fund - Direct Plan - Growth Option": "Baroda BNP Aqua",
+
+        "Nippon India Taiwan Equity Fund- Direct Plan- Growth Option": "Nippon Taiwan"
+        
     }
 }
 
@@ -419,10 +474,12 @@ SECTOR_DICT_MAP = {
     "CONSUMER":CONSUMER,
     "FOCUSED":FOCUSED,
     "OTHER":OTHER,
+    "INTERNATIONAL":INTERNATIONAL,
+    "BUSINESS_CYCLE": BUSINESS_CYCLE,
     "HEALTHCARE":HEALTHCARE,
     "FINANCIALS":FINANCIALS,
     "CONSUMER":CONSUMER,
-    "IT":IT
+    "IT":IT,
 }
 
 # --- UDFs ---
@@ -696,13 +753,11 @@ def compute_index_funds_returns(index_dict):
                 all_returns_df = pd.concat([all_returns_df,ret_df])
     return all_returns_df.round(2).sort_values(by=[("PtP Ret","3Y")],ascending=False)
 
+# --- App code ---
 st.set_page_config(page_title="Sector Returns", layout="wide")
 st.title("Sector Returns Dashboard")
 st.sidebar.header("Inputs")
-sectors = sorted(["SMALL_CAP","MULTI_ASSET","MULTI_CAP","FLEXI_CAP",
-                  "LARGE_CAP","MID_CAP","CONTRA","FOCUSED","OTHER",
-                  "HEALTHCARE","FINANCIALS","CONSUMER","IT"
-                  ])
+sectors = sorted(SECTOR_DICT_MAP.keys())
 
 sector = st.sidebar.selectbox("Select sector", sectors, index=0)
 run = st.sidebar.button("Compute returns", type="primary")
