@@ -1430,7 +1430,7 @@ with tab3:
     col1, col2 = st.columns([1, 3])
     with col1:
         st.markdown("### Settings")
-        top_n = st.number_input("Number of top performers", min_value=1, max_value=100, value=50, key="top_n")
+        top_n = st.number_input("Number of top performers", min_value=1, max_value=1000, value=100, key="top_n")
         periods_input = st.text_input("Enter periods (comma-separated)", value="1M, 3M, 6M, 1Y, 2Y, 3Y", key="top_perf_periods")
         # Parse the input into a list
         selected_periods = [p.strip() for p in periods_input.split(",") if p.strip()]
