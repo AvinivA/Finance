@@ -41,7 +41,7 @@ MULTI_ASSET = {
         "Bandhan Multi Asset Allocation Fund - Direct Plan - Growth": "Bandhan Multiasset",
         "Sundaram Multi Asset Allocation Fund Direct Plan Growth": "Sundaram Multiasset",
         "Invesco India Multi Asset Allocation Fund - Direct Plan - Growth": "Invesco Multiasset",
-        "Aditya Birla Sun Life Multi Asset Allocation Fund-Direct Growth": "Aditya Biral Multiasset",
+        "Aditya Birla Sun Life Multi Asset Allocation Fund-Direct Growth": "Aditya Birla Multiasset",
         "HSBC Multi Asset Allocation Fund - Direct - Growth": "HSBC Multiasset",
         "Union Multi Asset Allocation Fund- Direct Plan - Growth Option": "Union Multiasset",
         "SBI MULTI ASSET ALLOCATION FUND - DIRECT PLAN - GROWTH": "SBI Multiasset",
@@ -80,7 +80,7 @@ MULTI_CAP = {
         "BANDHAN MULTI CAP FUND - GROWTH - DIRECT PLAN": "Bandhan Multicap",
         "Sundaram Multi Cap Fund (Formerly Known as Principal Multi Cap Growth Fund)-Direct Plan - Growth Option": "Sundaram Multicap",
         "Invesco India Multicap Fund - Direct Plan - Growth Option": "Invesco Multicap",
-        "Aditya Birla Sun Life Multi-Cap Fund-Direct Growth": "Aditya Biral Multicap",
+        "Aditya Birla Sun Life Multi-Cap Fund-Direct Growth": "Aditya Birla Multicap",
         "HSBC Multi Cap Fund - Direct - Growth": "HSBC Multicap",
         "Union Multicap Fund - Direct Plan - Growth Option": "Union Multicap",
         "SBI Multicap Fund- Direct Plan- Growth option": "SBI Multicap",
@@ -137,7 +137,6 @@ FLEXI_CAP = {
         "JioBlackRock Flexi Cap Fund - Direct Plan - Growth Option": "Jio Blackrock Flexicap",
         "CAPITALMIND FLEXI CAP FUND DIRECT GROWTH": "CapitalMind Flexicap",
         "Abakkus Flexi Cap Fund - Direct - Growth": "Abakkus Flexicap",
-        "CAPITALMIND FLEXI CAP FUND DIRECT GROWTH": "Capitalmind Flexicap",
         "Shriram Flexi Cap Fund - Direct Growth": "Shriram Flexicap",
         "UTI Flexi Cap Fund - Direct Plan - IDCW": "UTI Flexicap",
         "Samco Flexi Cap Fund - Direct Plan - Growth Option": "Samco Flexicap",
@@ -165,7 +164,6 @@ LARGE_CAP = {
         "Edelweiss Large Cap Fund - Direct Plan-Growth option": "Edelweiss Largecap",
         "JM Large Cap Fund (Direct) - Growth Option": "JM Largecap",
         "Kotak Large Cap  Fund - Growth - Direct": "Kotak Largecap",
-        "CANARA ROBECO LARGE CAP FUND - DIRECT PLAN - GROWTH OPTION": "Canara Robeco Largecap",
         "HDFC Large Cap Fund - Growth Option - Direct Plan": "HDFC Largecap",
         "quant Large Cap Fund - Growth Option - Direct Plan": "Quant Largecap",
         "Mahindra Manulife Large Cap Fund - Direct Plan -Growth": "Mahindra Manulife Largecap",
@@ -272,7 +270,6 @@ CONTRA = {"Benchmark": ["NIFTY500 VALUE 50","NIFTY50 VALUE 20"],
         "JM Value Fund (Direct) - Growth Option": "JM Value",
         "Nippon India Value Fund - Direct Plan Growth Plan": "Nippon Value",
         "Quant Value Fund - Growth Option  - Direct Plan": "Quant Value",
-        "HSBC Value Fund - Direct Growth": "HSBC Value",
         "Axis Value Fund - Direct Plan - Growth":"Axis Value",        
     }
 }
@@ -580,7 +577,7 @@ IT = {
         "Motilal Oswal Nifty MidSmall IT and Telecom Index Fund - Direct Plan- Growth": "Motilal NIFTY Midsmall Tech",
         "Tata Nifty India Digital ETF Fund of Fund-Direct Plan-Growth": "Tata NIFTY Digital Tech",
         "HDFC Nifty India Digital Index Fund - Growth Option - Direct": "HDFC NIFTY Digital Tech",
-        "Nippon India Nifty IT Index Fund - Direct Plan - Growth Option": "Nipppon NIFTY Tech"
+        "Nippon India Nifty IT Index Fund - Direct Plan - Growth Option": "Nippon NIFTY Tech"
     }
 }
 
@@ -589,7 +586,6 @@ INFRA = {
     "Funds": {
         "Aditya Birla Sun Life Infrastructure Fund - Growth - Direct Plan": "Aditya Birla Infra",
         "BANDHAN Infrastructure Fund-Direct Plan-Growth": "Bandhan Infra",
-        "BANK OF INDIA Manufacturing & Infrastructure Fund-Direct Plan-Growth": "BoI Mfg and Infra",
         "CANARA ROBECO INFRASTRUCTURE FUND - DIRECT PLAN - GROWTH OPTION": "Canara Robeco Infra",
         "DSP India T.I.G.E.R. Fund - Direct Plan - Growth": "DSP Infra",
         "Franklin Build India Fund - Direct - Growth": "Franklin Infra",
