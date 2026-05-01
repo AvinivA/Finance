@@ -1,0 +1,13 @@
+jugaad_data==0.27
+matplotlib==3.10.9
+mftool==2.8
+nselib==1.5
+nsepython==2.97
+nsetools==2.0.1
+numpy==2.4.4
+pandas==3.0.2
+plotly==5.24.1
+python_dateutil==2.9.0.post0
+streamlit==1.37.1
+yahooquery==2.4.1
+yfinance==0.2.52
