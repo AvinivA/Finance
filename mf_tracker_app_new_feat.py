@@ -1222,53 +1222,74 @@ def plot_rolling_returns_from_index_dict(
     return figs
 
 
-def compute_all_funds_returns(sector_dict_map: dict, periods: List[str] = ["3M", "6M", "1Y", "2Y", "3Y"]) -> pd.DataFrame:
+def compute_all_funds_returns(sector_dict_map: dict, periods: List[str] = ["3M", "6M", "1Y", "2Y", "3Y"], max_workers: int = 5) -> pd.DataFrame:
     """
     Iterates through all sectors in SECTOR_DICT_MAP, fetches NAV for each fund,
-    computes point-to-point returns for the given periods, and returns a combined
-    DataFrame with all funds sorted by the specified periods.
+    computes point-to-point returns for the given periods using parallel execution,
+    and returns a combined DataFrame with all funds sorted by the specified periods.
     
     Args:
         sector_dict_map: Dictionary containing sector definitions with "Funds" key
         periods: List of periods to compute returns for (default: ["3M", "6M", "1Y", "2Y", "3Y"])
+        max_workers: Number of parallel workers for ThreadPoolExecutor (default: 4)
     
     Returns:
         DataFrame with fund names as index and returns for each period as columns
     """
-    all_funds_returns = pd.DataFrame()
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     
-    # Iterate through each sector in the dictionary
+    def process_fund(fund_task):
+        """Process a single fund and return results or None on error"""
+        sector_name, fund_name, norm_name = fund_task
+        try:
+            # Fetch historical NAV for the fund
+            t_df = fetch_fund_historical_nav(fund_name=fund_name)
+            
+            if t_df.empty or "nav" not in t_df.columns:
+                print(f"Skipping {fund_name}: No NAV data")
+                return None
+            
+            # Compute point-to-point returns
+            ret_df = compute_period_returns(
+                df=t_df,
+                periods=periods,
+                name=norm_name,
+                nav_col="nav",
+            )
+            
+            # Add sector information to the fund name for tracking
+            ret_df.index = [f"{norm_name} ({sector_name})"]
+            
+            return ret_df
+            
+        except Exception as e:
+            print(f"Skipping {fund_name}: {e}")
+            return None
+    
+    # Flatten all funds into a single list of tasks
+    all_fund_tasks = []
     for sector_name, sector_data in sector_dict_map.items():
         if "Funds" not in sector_data:
             continue
-        
-        # Iterate through each fund in the sector
         for fund_name, norm_name in sector_data["Funds"].items():
-            try:
-                # Fetch historical NAV for the fund
-                t_df = fetch_fund_historical_nav(fund_name=fund_name)
-                
-                if t_df.empty or "nav" not in t_df.columns:
-                    print(f"Skipping {fund_name}: No NAV data")
-                    continue
-                
-                # Compute point-to-point returns
-                ret_df = compute_period_returns(
-                    df=t_df,
-                    periods=periods,
-                    name=norm_name,
-                    nav_col="nav",
-                    #date_format="%d-%m-%Y"
-                )
-                
-                # Add sector information to the fund name for tracking
-                ret_df.index = [f"{norm_name} ({sector_name})"]
-                
-                all_funds_returns = pd.concat([all_funds_returns, ret_df])
-                
-            except Exception as e:
-                print(f"Skipping {fund_name}: {e}")
-                continue
+            all_fund_tasks.append((sector_name, fund_name, norm_name))
+    
+    # Process funds in parallel
+    all_funds_returns = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks and process results as they complete
+        futures = {executor.submit(process_fund, task): task for task in all_fund_tasks}
+        
+        for future in as_completed(futures):
+            result = future.result()
+            if result is not None:
+                all_funds_returns.append(result)
+    
+    # Combine all results
+    if not all_funds_returns:
+        return pd.DataFrame()
+    
+    all_funds_returns = pd.concat(all_funds_returns, ignore_index=False)
     
     # Flatten multi-index columns if present
     if isinstance(all_funds_returns.columns, pd.MultiIndex):
@@ -1318,8 +1339,20 @@ def get_sector_summary(top_performers: dict, all_returns_df: pd.DataFrame, top_n
         top_n: Number of top performers
     
     Returns:
-        Dictionary with period as key and DataFrame (sector, count, avg_return) as value
+        Dictionary with period as key and DataFrame (sector, ratio, avg_return) as value
     """
+    # Calculate total funds per sector from all_returns_df
+    total_funds_per_sector = {}
+    for fund_name in all_returns_df.index:
+        if "(" in fund_name and ")" in fund_name:
+            sector = fund_name.split("(")[-1].replace(")", "").strip()
+        else:
+            sector = "Unknown"
+        
+        if sector not in total_funds_per_sector:
+            total_funds_per_sector[sector] = 0
+        total_funds_per_sector[sector] += 1
+    
     sector_summary = {}
     
     for period, top_df in top_performers.items():
@@ -1345,17 +1378,21 @@ def get_sector_summary(top_performers: dict, all_returns_df: pd.DataFrame, top_n
             sector_counts[sector] += 1
             sector_returns[sector].append(return_val)
         
-        # Create summary DataFrame
+        # Create summary DataFrame with ratio format (e.g., "15/25")
         summary_data = []
         for sector in sector_counts:
+            count_in_top = sector_counts[sector]
+            total_in_sector = total_funds_per_sector.get(sector, 0)
             summary_data.append({
                 "Sector": sector,
-                "Funds in Top " + str(top_n): sector_counts[sector],
+                "Funds in Top " + str(top_n): f"{count_in_top}/{total_in_sector}",
                 "Avg Return (%)": round(np.mean(sector_returns[sector]), 2)
             })
         
         summary_df = pd.DataFrame(summary_data)
-        summary_df = summary_df.sort_values(by="Funds in Top " + str(top_n), ascending=False)
+        # Sort by the count in top (extract numerator from ratio)
+        summary_df["_sort_key"] = summary_df["Funds in Top " + str(top_n)].apply(lambda x: int(x.split("/")[0]))
+        summary_df = summary_df.sort_values(by="_sort_key", ascending=False).drop(columns=["_sort_key"])
         sector_summary[period] = summary_df
     
     return sector_summary
