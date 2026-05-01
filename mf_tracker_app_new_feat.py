@@ -334,6 +334,35 @@ BUSINESS_CYCLE = {
     }
 }
 
+ACTIVE_MOMETUM = {
+    "Benchmark": ["NIFTY200MOMENTM30","NIFTY500MOMENTM50"],
+    "Funds": {
+        "ICICI Prudential Active Momentum Fund - Direct Plan - Growth": "ICICI Active Momentum",
+        'Kotak Active Momentum Fund - Direct Plan - Growth option': "Kotak Active Momentum",
+        'Motilal Oswal Active Momentum Fund- Direct-Growth': "Motilal Active Momentum",
+        'Nippon India Active Momentum Fund-Direct Plan - Growth Option': "Nippon Active Momentum",
+        'Samco Active Momentum Fund - Direct Plan - Growth Option': "Samco Active Momentum",
+        'Union Active Momentum Fund - Direct Plan - Growth Option': "Union Active Momentum"
+    }
+}
+
+QUANT = {
+    "Benchmark": ["NIFTY 50","NIFTY 500"],
+    "Funds": {
+        '360 ONE QUANT FUND DIRECT GROWTH': "360 One Quant",
+        'Aditya Birla Sun Life Quant Fund - Direct Growth': "Aditya Birla Quant",
+        'Axis Quant Fund - Direct Plan - Growth': "Axis Quant",
+        'DSP Quant Fund - Direct Plan - Growth': "DSP Quant",
+        'ICICI Prudential Quant Fund Direct Plan Growth': "ICICI Quant",
+        'Kotak Quant Fund - Direct Plan - Growth Option': "Kotak Quant",
+        'Motilal Oswal Quant Fund - Direct - Growth': "Motilal Oswal Quant",
+        'Nippon India Quant Fund - Direct Plan Growth Plan - Growth Option': "Nippon Quant",
+        'SBI Quant Fund- Direct Plan- Growth': "SBI Quant",
+        'Tata Quant Fund-Direct Plan-Growth': "Tata Quant",
+        'UTI Quant Fund - Direct Plan - Growth Option': "UTI Quant"
+    }
+}
+
 INTERNATIONAL = {
     "Benchmark": ["NIFTY 500"],
     "Funds": {
@@ -369,7 +398,9 @@ INTERNATIONAL = {
 
         "PGIM India Emerging Markets Equity Fund of Fund - Direct Plan - Growth": "PGIM Emerging Market",
         "PGIM India Global Equity Opportunities Fund of Fund- Direct Plan - Growth": "PGIM Global Equity",
-        "PGIM India Global Select Real Estate Securities Fund of Fund - Direct Plan - Growth Option": "PGIM Global Real Estate"
+        "PGIM India Global Select Real Estate Securities Fund of Fund - Direct Plan - Growth Option": "PGIM Global Real Estate",
+
+        'Mirae Asset Global Electric & Autonomous Vehicles Equity Passive FOF - Direct Plan - Growth': "Mirae Asset Global Auto and EV"
     }
 }
 
@@ -553,6 +584,124 @@ IT = {
     }
 }
 
+INFRA = {
+    "Benchmark": ["NIFTY INFRA","NIFTY MULTI INFRA"],
+    "Funds": {
+        "Aditya Birla Sun Life Infrastructure Fund - Growth - Direct Plan": "Aditya Birla Infra",
+        "BANDHAN Infrastructure Fund-Direct Plan-Growth": "Bandhan Infra",
+        "BANK OF INDIA Manufacturing & Infrastructure Fund-Direct Plan-Growth": "BoI Mfg and Infra",
+        "CANARA ROBECO INFRASTRUCTURE FUND - DIRECT PLAN - GROWTH OPTION": "Canara Robeco Infra",
+        "DSP India T.I.G.E.R. Fund - Direct Plan - Growth": "DSP Infra",
+        "Franklin Build India Fund - Direct - Growth": "Franklin Infra",
+        "HDFC Infrastructure Fund - Growth Option - Direct Plan": "HDFC Infra",
+        "HSBC Infrastructure Fund - Direct Growth": "HSBC Infra",
+        "ICICI Prudential Infrastructure Fund - Direct Plan -  Growth": "ICICI Infra",
+        "Invesco India Infrastructure Fund - Direct Plan - Growth Option": "Invesco Infra",
+        "Kotak Infrastructure & Economic Reform Fund- Direct Plan- Growth Option": "Kotak Infra",
+        "LIC MF Infrastructure Fund-Direct Plan-Growth": "LIC Infra",
+        "Mirae Asset Infrastructure Fund - Direct Plan - Growth": "Mirae Asset Infra",
+        "Motilal Oswal Infrastructure Fund-Direct-Growth": "Motilal Infra",
+        "Nippon India Power & Infra Fund - Direct Plan Growth Plan - Growth Option": "Nippon Infra",
+        "quant Infrastructure Fund - Growth Option-Direct Plan": "Quant Infra",
+        "SBI INFRASTRUCTURE FUND -  DIRECT PLAN - GROWTH": "SBI Infra",
+        "Sundaram Infrastructure Advantage Fund Direct Plan - Growth": "Sundaram Infra",
+        "Tata Infrastructure Fund -Direct Plan -Growth Option": "Tata Infra",
+        'Taurus Infrastructure Fund - Direct Plan - Growth ': "Taurus Infra",
+        'UTI Infrastructure Fund-Growth Option- Direct': "UTI Infra",
+        "Tata Nifty500 Multicap Infrastructure 50:30:20 Index Fund - Direct Plan - Growth": "Tata NIFTY500 Multicap Infra",
+
+    }
+}
+
+ENERGY = {
+    "Benchmark": ['NIFTY ENERGY'],
+    "Funds": {
+        "Baroda BNP Paribas Energy Opportunities Fund - Direct Plan - Growth Option": "Baroda BNP Energy",
+        "DSP Natural Resources and New Energy Fund - Direct Plan - Growth": "DSP Natural Resource and Energy",
+        'ICICI PRUDENTIAL ENERGY OPPORTUNITIES FUND - Direct Plan - Growth': "ICICI Energy",
+        'Kotak Energy Opportunities Fund-Direct-Growth': "Kotak Energy",
+        'SBI Energy Opportunities Fund - Direct Plan - Growth': "SBI Energy",
+        'Tata Resources & Energy Fund-Direct Plan-Growth': "Tata Resources and Energy",
+        'DSP Global Clean Energy Overseas Equity Omni FoF Direct Plan - Growth': "DSP Global Clean Energy",
+        'ICICI Prudential Strategic Metal and Energy Equity Fund of Fund - Direct Plan Growth': "ICICI Strategic Metal and Energy",
+    }
+}
+
+INNOVATION = {
+    "Benchmark": ['NIFTY IT'],
+    "Funds": {
+        'Axis Innovation Fund - Direct Plan - Growth Option': "Axis Innovation",
+        'Bandhan Innovation Fund - Direct Plan - Growth': "Bandhan Innovation",
+        'Baroda BNP Paribas Innovation Fund Direct plan - Growth Option': "Baroda BNP Innovation",
+        'HDFC INNOVATION FUND - DIRECT PLAN - GROWTH OPTION': "HDFC Innovation",
+        'ICICI Prudential Innovation Fund - Direct Plan - Growth': "ICICI Innovation",
+        'Mahindra Manulife Innovation Opportunities Fund - Direct - Growth': "Mahindra Manulife Innovation",
+        'Motilal Oswal Innovation Opportunities Fund - Direct Plan- Growth': "Motilal Innovation",
+        'Nippon India Innovation Fund-Direct Plan-Growth Option': "Nippon Innovation",
+        'Tata India Innovation Fund- Direct Growth': "Tata Innovation",
+        'Union Innovation & Opportunities Fund - Direct Plan - Growth Option': "Union Innovation",
+        'UTI Innovation Fund - Direct Plan - Growth Option': "UTI Innovation",
+    }
+}
+
+MANUFACTURING = {
+    "Benchmark": ['NIFTY MULTI MFG','NIFTY INDIA MFG'],
+    "Funds": {
+        'Aditya Birla Sun Life Manufacturing Equity Fund - Direct Plan - Growth': "Aditya Birla Mfg",
+        'Axis India Manufacturing Fund - Direct Plan - Growth': "Axis Mfg",
+        'BANK OF INDIA Manufacturing & Infrastructure Fund-Direct Plan-Growth': "BOI Mfg",
+        'Baroda BNP Paribas Manufacturing Fund - Direct Plan - Growth Option': "Baroda BNP Mfg",
+        'Canara Robeco Manufacturing Fund - Direct Plan - Growth Option': "Canara Robeco Mfg",
+        'HDFC Manufacturing fund - Growth Option - Direct Plan': "HDFC Mfg",
+        'Invesco India Manufacturing Fund - Direct Plan - Growth'  : "Invesco Mfg",
+        'Kotak Manufacture in India Fund - Direct Plan Growth': "Kotak Mfg",
+        'LIC MF Manufacturing Fund-Direct Plan-Growth': "LIC Mfg",
+        'Mahindra Manulife Manufacturing Fund - Direct Plan - Growth': "Mahindra Manulife Mfg",
+        'Motilal Oswal Manufacturing Fund - Direct Plan- Growth': "Motilal Mfg",
+        'quant Manufacturing Fund - Growth Option - Direct Plan': "Quant Mfg",
+        'Mirae Asset Nifty India Manufacturing ETF FOF - Direct Plan - Growth': "Mirae Asset NIFTY Mfg",
+        'Navi Nifty India Manufacturing Index Fund- Direct Plan- Growth': "Navi NIFTY Mfg",
+        'Nippon India Nifty India Manufacturing Index Fund- Direct Plan- Growth Option': "Nippon NIFTY Mfg",
+        'Tata Nifty500 Multicap India Manufacturing 50:30:20 Index Fund -Direct Plan-Growth': "Tata NIFTY500 Mfg",
+        'UTI Nifty India Manufacturing Index Fund - Direct Plan - Growth Option': "UTI NIFTY Mfg",
+    }
+}
+
+SPECIAL_OPP = {
+    "Benchmark": ["NIFTY 50","NIFTY 500"],
+    "Funds": {
+            'Aditya Birla Sun Life Special Opportunities Fund-Direct-Growth': "Aditya Birla Special Opp",
+            'Kotak Special Opportunities Fund - Direct Plan - Growth Option': "Kotak Special Opp",
+            'Motilal Oswal Special Opportunities Fund - Direct - Growth': "Motilal Special Opp",
+            'Samco Special Opportunities Fund - Direct Plan - Growth': "Samco Special Opp",
+            'WhiteOak Capital Special Opportunities Fund - Direct Growth': "WhiteOak Special Opp"
+    }
+}
+
+TRANSP = {
+    "Benchmark": ['NIFTY TRANS LOGIS'],
+    "Funds": {
+            'Aditya Birla Sun Life Transportation and Logistics Fund-Direct Growth': "Aditya Birla Transp",
+            'BANDHAN TRANSPORTATION AND LOGISTICS FUND - GROWTH - DIRECT PLAN': "Bandhan Transp",
+            'HDFC Transportation and Logistics Fund - Growth Option - Direct Plan': "HDFC Transp",
+            'ICICI PRUDENTIAL TRANSPORTATION AND LOGISTICS FUND - Direct Plan - Growth': "ICICI Transp",
+            'Kotak Transportation & Logistics Fund-Direct Growth': "Kotak Transp",
+            'UTI-Transportation and Logistics  Fund-Growth Option- Direct': "UTI Transp"
+    }
+}
+
+AUTO = {
+    "Benchmark": ['NIFTY AUTO'],
+    "Funds": {
+            'SBI Automotive Opportunities Fund - Direct Plan - Growth': "SBI Auto",
+            'Groww Nifty EV & New Age Automotive ETF FOF- Direct Plan - Growth': "Groww NIFTY Auto",
+            'ICICI Prudential Nifty EV & New Age Automotive ETF FOF - Direct Plan - Growth': "ICICI NIFTY Auto",
+            'ICICI Prudential Nifty Auto Index Fund - Direct Plan - Growth': "ICICI NIFTY Auto",
+            'Nippon India Nifty Auto Index Fund - Direct Plan- Growth Option': "Nippon NIFTY Auto",
+            'Tata Nifty Auto Index Fund - Direct Plan - Growth': "Tata NIFTY Auto"
+    }
+}
+
 SECTOR_DICT_MAP = {
     "MULTI_CAP":MULTI_CAP,
     "SMALL_CAP":SMALL_CAP,
@@ -564,12 +713,21 @@ SECTOR_DICT_MAP = {
     "CONSUMER":CONSUMER,
     "FOCUSED":FOCUSED,
     "OTHER":OTHER,
+    "ACTIVE_MOMETUM":ACTIVE_MOMETUM, # new
+    "QUANT":QUANT, # new
     "INTERNATIONAL":INTERNATIONAL,
     "BUSINESS_CYCLE": BUSINESS_CYCLE,
     "HEALTHCARE":HEALTHCARE,
     "FINANCIALS":FINANCIALS,
     "CONSUMER":CONSUMER,
     "IT":IT,
+    "INFRA":INFRA, # new
+    "ENERGY":ENERGY, # new
+    "INNOVATION":INNOVATION, # new
+    "MANUFACTURING":MANUFACTURING, # new
+    "SPECIAL_OPP":SPECIAL_OPP, # new
+    "TRANSP":TRANSP, # new
+    "AUTO":AUTO, # new
     "ARBITRAGE":ARBITRAGE,
     "EQ_SAVING":EQ_SAVING
 }
