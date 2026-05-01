@@ -1,6 +1,6 @@
 # --- Import libraries ---
 import pandas as pd
-from nselib import capital_market
+#from nselib import capital_market
 import numpy as np
 import matplotlib.pyplot as plt
 from mftool import Mftool
@@ -9,7 +9,7 @@ from datetime import date
 import datetime
 import pandas as pd
 from dateutil.relativedelta import relativedelta
-from jugaad_data.nse import index_raw
+#from jugaad_data.nse import index_raw
 import yfinance as yf
 import re
 from typing import List, Optional
