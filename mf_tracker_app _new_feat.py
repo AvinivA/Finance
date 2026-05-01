@@ -17,6 +17,7 @@ from nsetools import Nse
 from nsepython import index_history
 import streamlit as st
 import time
+import plotly.express as px
 
 # --- Global Declarations ---
 TDY_DATE = pd.to_datetime(datetime.datetime.today()).strftime("%d-%b-%Y")
@@ -829,25 +830,9 @@ def fetch_benchmark_index_data(
         ) from last_exception
 
     historical_data = pd.DataFrame(historical_data)
-    print(historical_data.head())
+    #print(historical_data.head())
 
-    rolling_ret_df = hybrid_returns_table(
-        df=historical_data[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
-        periods=ROLLING_RETURN_PERIODS,
-        name=ticker,
-        nav_col="CLOSE",
-        date_format="%d %b %Y"
-    )
-
-    pp_ret_df = compute_period_returns(
-        df=historical_data[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
-        periods=POINT_TO_POINT_RETURN_PERIODS,
-        name=ticker,
-        nav_col="CLOSE",
-        date_format="%d %b %Y"
-    )
-
-    return pd.concat([rolling_ret_df, pp_ret_df], axis=1)
+    return historical_data
 
 def compute_index_funds_returns(index_dict):
     all_returns_df = pd.DataFrame()
@@ -857,6 +842,22 @@ def compute_index_funds_returns(index_dict):
             for idx in y:
                 #print(y)
                 ret_df = fetch_benchmark_index_data(ticker=idx)
+                rolling_ret_df = hybrid_returns_table(
+                    df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
+                    periods=ROLLING_RETURN_PERIODS,
+                    name=idx,
+                    nav_col="CLOSE",
+                    date_format="%d %b %Y"
+                )
+
+                pp_ret_df = compute_period_returns(
+                    df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
+                    periods=POINT_TO_POINT_RETURN_PERIODS,
+                    name=idx,
+                    nav_col="CLOSE",
+                    date_format="%d %b %Y"
+                )
+                ret_df =  pd.concat([rolling_ret_df, pp_ret_df], axis=1)                
                 all_returns_df = pd.concat([all_returns_df,ret_df])
         
         elif x == "Funds":
@@ -865,7 +866,9 @@ def compute_index_funds_returns(index_dict):
                 t_df = fetch_fund_historical_nav(fund_name=fund_name)
                 rolling_ret_df = hybrid_returns_table(df=t_df,
                                         periods=ROLLING_RETURN_PERIODS,
-                                        name=norm_name
+                                        name=norm_name,
+                                        nav_col="NAV",
+                                        date_format="%d %b %Y"
                                         )
                 pp_ret_df = compute_period_returns(df=t_df,
                                         periods=POINT_TO_POINT_RETURN_PERIODS,
@@ -873,7 +876,7 @@ def compute_index_funds_returns(index_dict):
                                         )
                 ret_df = pd.concat([pp_ret_df,rolling_ret_df],axis=1)
                 all_returns_df = pd.concat([all_returns_df,ret_df])
-    return all_returns_df.round(2).sort_values(by=[("PtP Ret","3Y")],ascending=False)
+    return all_returns_df.round(2).sort_values(by=[("Point to Point Returns","3Y")],ascending=False)
 
 def rolling_yearly_returns_timeseries(
     df: pd.DataFrame,
@@ -1061,33 +1064,248 @@ def plot_rolling_returns_from_index_dict(
         fig.update_traces(hovertemplate="%{y:.2%}")
 
         figs[tenor] = fig
-        fig.show()
 
-    #return figs
-    return
+    return figs
+
+
+def compute_all_funds_returns(sector_dict_map: dict, periods: List[str] = ["3M", "6M", "1Y", "2Y", "3Y"]) -> pd.DataFrame:
+    """
+    Iterates through all sectors in SECTOR_DICT_MAP, fetches NAV for each fund,
+    computes point-to-point returns for the given periods, and returns a combined
+    DataFrame with all funds sorted by the specified periods.
+    
+    Args:
+        sector_dict_map: Dictionary containing sector definitions with "Funds" key
+        periods: List of periods to compute returns for (default: ["3M", "6M", "1Y", "2Y", "3Y"])
+    
+    Returns:
+        DataFrame with fund names as index and returns for each period as columns
+    """
+    all_funds_returns = pd.DataFrame()
+    
+    # Iterate through each sector in the dictionary
+    for sector_name, sector_data in sector_dict_map.items():
+        if "Funds" not in sector_data:
+            continue
+        
+        # Iterate through each fund in the sector
+        for fund_name, norm_name in sector_data["Funds"].items():
+            try:
+                # Fetch historical NAV for the fund
+                t_df = fetch_fund_historical_nav(fund_name=fund_name)
+                
+                if t_df.empty or "nav" not in t_df.columns:
+                    print(f"Skipping {fund_name}: No NAV data")
+                    continue
+                
+                # Compute point-to-point returns
+                ret_df = compute_period_returns(
+                    df=t_df,
+                    periods=periods,
+                    name=norm_name,
+                    nav_col="nav",
+                    #date_format="%d-%m-%Y"
+                )
+                
+                # Add sector information to the fund name for tracking
+                ret_df.index = [f"{norm_name} ({sector_name})"]
+                
+                all_funds_returns = pd.concat([all_funds_returns, ret_df])
+                
+            except Exception as e:
+                print(f"Skipping {fund_name}: {e}")
+                continue
+    
+    # Flatten multi-index columns if present
+    if isinstance(all_funds_returns.columns, pd.MultiIndex):
+        all_funds_returns.columns = [
+            " - ".join([str(x) for x in col if x is not None and str(x) != ""])
+            for col in all_funds_returns.columns
+        ]
+    
+    return all_funds_returns.round(2)
+
+
+def get_top_performers(all_returns_df: pd.DataFrame, periods: List[str] = ["3M", "6M", "1Y", "2Y", "3Y"], top_n: int = 10) -> dict:
+    """
+    Returns the top performing funds for each period.
+    
+    Args:
+        all_returns_df: DataFrame with fund returns
+        periods: List of periods to get top performers for
+        top_n: Number of top performers to return per period
+    
+    Returns:
+        Dictionary with period as key and DataFrame of top performers as value
+    """
+    top_performers = {}
+    
+    for period in periods:
+        # Find the column that contains this period
+        period_cols = [col for col in all_returns_df.columns if period in col]
+        if not period_cols:
+            continue
+        
+        col = period_cols[0]
+        # Sort by the period column descending and get top N
+        top_df = all_returns_df[[col]].dropna().sort_values(by=col, ascending=False).head(top_n)
+        top_performers[period] = top_df
+    
+    return top_performers
+
+
+def get_sector_summary(top_performers: dict, all_returns_df: pd.DataFrame, top_n: int) -> dict:
+    """
+    Returns a summary of sectors for the top X performers.
+    
+    Args:
+        top_performers: Dictionary with period as key and DataFrame of top performers as value
+        all_returns_df: DataFrame with all fund returns (includes sector info in index)
+        top_n: Number of top performers
+    
+    Returns:
+        Dictionary with period as key and DataFrame (sector, count, avg_return) as value
+    """
+    sector_summary = {}
+    
+    for period, top_df in top_performers.items():
+        # Extract sector from the fund name (format: "FundName (SECTOR)")
+        sector_counts = {}
+        sector_returns = {}
+        
+        for fund_name in top_df.index:
+            # Parse sector from fund name
+            if "(" in fund_name and ")" in fund_name:
+                sector = fund_name.split("(")[-1].replace(")", "").strip()
+            else:
+                sector = "Unknown"
+            
+            # Get the return value
+            return_col = [col for col in all_returns_df.columns if period in col][0]
+            return_val = all_returns_df.loc[fund_name, return_col]
+            
+            if sector not in sector_counts:
+                sector_counts[sector] = 0
+                sector_returns[sector] = []
+            
+            sector_counts[sector] += 1
+            sector_returns[sector].append(return_val)
+        
+        # Create summary DataFrame
+        summary_data = []
+        for sector in sector_counts:
+            summary_data.append({
+                "Sector": sector,
+                "Funds in Top " + str(top_n): sector_counts[sector],
+                "Avg Return (%)": round(np.mean(sector_returns[sector]), 2)
+            })
+        
+        summary_df = pd.DataFrame(summary_data)
+        summary_df = summary_df.sort_values(by="Funds in Top " + str(top_n), ascending=False)
+        sector_summary[period] = summary_df
+    
+    return sector_summary
 
 
 # --- App code ---
-st.set_page_config(page_title="Sector Returns", layout="wide")
-st.title("Sector Returns Dashboard")
-st.sidebar.header("Inputs")
-sectors = sorted(SECTOR_DICT_MAP.keys())
+st.set_page_config(page_title="MF Tracker", layout="wide")
+st.title("MF Tracker")
 
-sector = st.sidebar.selectbox("Select sector", sectors, index=0)
-run = st.sidebar.button("Compute returns", type="primary")
+# Create tabs
+tab1, tab2, tab3 = st.tabs(["Sector Returns", "Index Charts", "Top Performers"])
 
-if run:
-    returns_df = compute_index_funds_returns(SECTOR_DICT_MAP[sector])
-    st.subheader(f"Returns — {sector} (as of {TDY_DATE})")
-    def flatten_columns(df):
-        if isinstance(df.columns, pd.MultiIndex):
-            df = df.copy()
-            df.columns = [
-                " - ".join([str(x) for x in col if x is not None and str(x) != ""])
-                for col in df.columns
-            ]
-        return df
+# --- Tab 1: Sector Returns Dashboard ---
+with tab1:
+    st.subheader("Sector Returns Dashboard")
+    
+    # Left column for inputs
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.markdown("### Select Sector")
+        sectors = sorted(SECTOR_DICT_MAP.keys())
+        sector = st.selectbox("Choose sector", sectors, index=0, key="sector_tab1")
+        run = st.button("Compute Returns", type="primary")
+    
+    with col2:
+        if run:
+            with st.spinner("Computing returns..."):
+                returns_df = compute_index_funds_returns(SECTOR_DICT_MAP[sector])
+                st.subheader(f"Returns — {sector} (as of {TDY_DATE})")
+                def flatten_columns(df):
+                    if isinstance(df.columns, pd.MultiIndex):
+                        df = df.copy()
+                        df.columns = [
+                            " - ".join([str(x) for x in col if x is not None and str(x) != ""])
+                            for col in df.columns
+                        ]
+                    return df
+                st.dataframe(flatten_columns(returns_df), use_container_width=True)
+        else:
+            st.info("Select a sector and click **Compute Returns**.")
 
-    st.dataframe(flatten_columns(returns_df), use_container_width=True)
-else:
-    st.info("Choose a sector and click **Compute returns**.")
+# --- Tab 2: Index Charts ---
+with tab2:
+    st.subheader("Index Return Chart")
+    
+    # Left column for inputs
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.markdown("### Select Index")
+        sectors = sorted(SECTOR_DICT_MAP.keys())
+        chart_sector = st.selectbox("Choose sector", sectors, index=0, key="chart_tab2")
+        run_chart = st.button("Plot Rolling Returns", type="primary")
+    
+    with col2:
+        if run_chart:
+            with st.spinner("Fetching data and plotting..."):
+                figs = plot_rolling_returns_from_index_dict(SECTOR_DICT_MAP[chart_sector])
+                for tenor, fig in figs.items():
+                    st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Select an index and click **Plot Rolling Returns**.")
+
+# --- Tab 3: Top Performers ---
+with tab3:
+    st.subheader("Top Performers Across All Sectors")
+    
+    # Left column for inputs
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.markdown("### Settings")
+        top_n = st.number_input("Number of top performers", min_value=1, max_value=100, value=50, key="top_n")
+        periods_input = st.text_input("Enter periods (comma-separated)", value="1M, 3M, 6M, 1Y, 2Y, 3Y", key="top_perf_periods")
+        # Parse the input into a list
+        selected_periods = [p.strip() for p in periods_input.split(",") if p.strip()]
+        run_top = st.button("Find Top Performers", type="primary")
+    
+    with col2:
+        if run_top:
+            if not selected_periods:
+                st.warning("Please select at least one period.")
+            else:
+                with st.spinner("Computing returns for all funds..."):
+                    # Compute all funds returns
+                    all_returns = compute_all_funds_returns(SECTOR_DICT_MAP, periods=selected_periods)
+                    
+                    if all_returns.empty:
+                        st.warning("No data available.")
+                    else:
+                        # Get top performers
+                        top_performers = get_top_performers(all_returns, periods=selected_periods, top_n=top_n)
+                        
+                        # Get sector summary
+                        sector_summary = get_sector_summary(top_performers, all_returns, top_n)
+                        
+                        # Display top performers and sector summary for each period
+                        for period in selected_periods:
+                            if period in top_performers:
+                                st.markdown(f"#### Top {top_n} Performers - {period}")
+                                st.dataframe(top_performers[period], use_container_width=True)
+                                
+                                # Display sector summary
+                                if period in sector_summary:
+                                    st.markdown(f"**Sector Summary - {period}**")
+                                    st.dataframe(sector_summary[period], use_container_width=True)
+                                st.markdown("---")
+        else:
+            st.info("Select the number of top performers and periods, then click **Find Top Performers**.")
