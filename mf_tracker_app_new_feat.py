@@ -691,7 +691,7 @@ AUTO = {
     "Funds": {
             'SBI Automotive Opportunities Fund - Direct Plan - Growth': "SBI Auto",
             'Groww Nifty EV & New Age Automotive ETF FOF- Direct Plan - Growth': "Groww NIFTY Auto",
-            'ICICI Prudential Nifty EV & New Age Automotive ETF FOF - Direct Plan - Growth': "ICICI NIFTY Auto",
+            'ICICI Prudential Nifty EV & New Age Automotive ETF FOF - Direct Plan - Growth': "ICICI NIFTY EV and new age Auto",
             'ICICI Prudential Nifty Auto Index Fund - Direct Plan - Growth': "ICICI NIFTY Auto",
             'Nippon India Nifty Auto Index Fund - Direct Plan- Growth Option': "Nippon NIFTY Auto",
             'Tata Nifty Auto Index Fund - Direct Plan - Growth': "Tata NIFTY Auto"
