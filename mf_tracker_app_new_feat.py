@@ -1125,11 +1125,13 @@ def plot_rolling_returns_from_index_dict(
     index_dict: dict,
     yearly_periods=("1Y", "2Y", "3Y", "5Y", "10Y"),
     yearly_annualized: bool = True,
+    max_workers: int = 5,
     # Assumes these exist in scope:
     # fetch_benchmark_index_data, fetch_fund_historical_nav, rolling_yearly_returns_timeseries
 ) -> dict:
     
-    # ... [Data Fetching Helper Logic - Same as before] ...
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
     def _compute_rolling_for_series(df_nav: pd.DataFrame, name: str, nav_col: str, date_format: str):
         rr = rolling_yearly_returns_timeseries(
             df=df_nav,
@@ -1145,32 +1147,45 @@ def plot_rolling_returns_from_index_dict(
         rr["Series"] = name
         return rr
 
-    all_long = []
+    def fetch_and_compute(task):
+        task_type, source, name = task
+        try:
+            if task_type == "benchmark":
+                hist = fetch_benchmark_index_data(ticker=source)
+                bench_nav = hist[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate")
+                result = _compute_rolling_for_series(bench_nav, f"Benchmark: {source}", "CLOSE", "%d %b %Y").rename(columns={"historicaldate": "date"})
+            else:
+                t_df = fetch_fund_historical_nav(fund_name=source)
+                result = _compute_rolling_for_series(t_df, name, "nav", "%d-%m-%Y")
+            return result
+        except Exception as e:
+            if task_type == "benchmark":
+                print(f"Skipping benchmark {source}: {e}")
+            else:
+                print(f"Skipping {source}: {e}")
+            return None
 
-    # 1. Fetch Benchmarks
+    tasks = []
     if "Benchmark" in index_dict:
         for ticker in index_dict["Benchmark"]:
-            try:
-                hist = fetch_benchmark_index_data(ticker=ticker)
-                bench_nav = hist[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate")
-                all_long.append(_compute_rolling_for_series(bench_nav, f"Benchmark: {ticker}", "CLOSE", "%d %b %Y").rename(columns={"historicaldate":"date"}))
-            except Exception as e:
-                print(f"Skipping {ticker}: {e}")
-
-    # 2. Fetch Funds
+            tasks.append(("benchmark", ticker, None))
     if "Funds" in index_dict:
         for fund_name, norm_name in index_dict["Funds"].items():
-            try:
-                t_df = fetch_fund_historical_nav(fund_name=fund_name)
-                all_long.append(_compute_rolling_for_series(t_df, norm_name, "nav", "%d-%m-%Y"))
-            except Exception as e:
-                print(f"Skipping {fund_name}: {e}")
+            tasks.append(("fund", fund_name, norm_name))
+
+    all_long = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(fetch_and_compute, task): task for task in tasks}
+        for future in as_completed(futures):
+            result = future.result()
+            if result is not None:
+                all_long.append(result)
 
     if not all_long:
         return {}
 
     long_df = pd.concat(all_long, ignore_index=True)
-    print(long_df.head())
+    #print(long_df.head())
     long_df["date"] = pd.to_datetime(long_df["date"])
     long_df = long_df.sort_values("date")
 
