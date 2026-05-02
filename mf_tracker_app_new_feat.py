@@ -994,7 +994,7 @@ def compute_index_funds_returns(index_dict):
     for x,y in index_dict.items():
         if x == "Benchmark":
             for idx in y:
-                #print(y)
+                #print(idx)
                 ret_df = fetch_benchmark_index_data(ticker=idx)
                 rolling_ret_df = hybrid_returns_table(
                     df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
@@ -1020,9 +1020,7 @@ def compute_index_funds_returns(index_dict):
                 t_df = fetch_fund_historical_nav(fund_name=fund_name)
                 rolling_ret_df = hybrid_returns_table(df=t_df,
                                         periods=ROLLING_RETURN_PERIODS,
-                                        name=norm_name,
-                                        nav_col="NAV",
-                                        date_format="%d %b %Y"
+                                        name=norm_name
                                         )
                 pp_ret_df = compute_period_returns(df=t_df,
                                         periods=POINT_TO_POINT_RETURN_PERIODS,
@@ -1030,7 +1028,7 @@ def compute_index_funds_returns(index_dict):
                                         )
                 ret_df = pd.concat([pp_ret_df,rolling_ret_df],axis=1)
                 all_returns_df = pd.concat([all_returns_df,ret_df])
-    return all_returns_df.round(2).sort_values(by=[("Point to Point Returns","3Y")],ascending=False)
+    return all_returns_df.round(2).sort_values(by=[("PtP Ret","3Y")],ascending=False)
 
 def rolling_yearly_returns_timeseries(
     df: pd.DataFrame,
@@ -1424,6 +1422,12 @@ tab1, tab2, tab3 = st.tabs(["Sector Returns", "Index Charts", "Top Performers"])
 with tab1:
     st.subheader("Sector Returns Dashboard")
     
+    # Initialize session state for tab1
+    if "tab1_sector" not in st.session_state:
+        st.session_state.tab1_sector = None
+    if "tab1_returns_df" not in st.session_state:
+        st.session_state.tab1_returns_df = None
+    
     # Left column for inputs
     col1, col2 = st.columns([1, 3])
     with col1:
@@ -1436,22 +1440,35 @@ with tab1:
         if run:
             with st.spinner("Computing returns..."):
                 returns_df = compute_index_funds_returns(SECTOR_DICT_MAP[sector])
-                st.subheader(f"Returns — {sector} (as of {TDY_DATE})")
-                def flatten_columns(df):
-                    if isinstance(df.columns, pd.MultiIndex):
-                        df = df.copy()
-                        df.columns = [
-                            " - ".join([str(x) for x in col if x is not None and str(x) != ""])
-                            for col in df.columns
-                        ]
-                    return df
-                st.dataframe(flatten_columns(returns_df), use_container_width=True)
+                # Cache in session state
+                st.session_state.tab1_sector = sector
+                st.session_state.tab1_returns_df = returns_df
+                st.rerun()
+        
+        # Display cached results if available
+        if st.session_state.tab1_returns_df is not None:
+            st.subheader(f"Returns — {st.session_state.tab1_sector} (as of {TDY_DATE})")
+            def flatten_columns(df):
+                if isinstance(df.columns, pd.MultiIndex):
+                    df = df.copy()
+                    df.columns = [
+                        " - ".join([str(x) for x in col if x is not None and str(x) != ""])
+                        for col in df.columns
+                    ]
+                return df
+            st.dataframe(flatten_columns(st.session_state.tab1_returns_df), use_container_width=True)
         else:
             st.info("Select a sector and click **Compute Returns**.")
 
 # --- Tab 2: Index Charts ---
 with tab2:
     st.subheader("Index Return Chart")
+    
+    # Initialize session state for tab2
+    if "tab2_sector" not in st.session_state:
+        st.session_state.tab2_sector = None
+    if "tab2_figs" not in st.session_state:
+        st.session_state.tab2_figs = None
     
     # Left column for inputs
     col1, col2 = st.columns([1, 3])
@@ -1465,14 +1482,31 @@ with tab2:
         if run_chart:
             with st.spinner("Fetching data and plotting..."):
                 figs = plot_rolling_returns_from_index_dict(SECTOR_DICT_MAP[chart_sector])
-                for tenor, fig in figs.items():
-                    st.plotly_chart(fig, use_container_width=True)
+                # Cache in session state
+                st.session_state.tab2_sector = chart_sector
+                st.session_state.tab2_figs = figs
+                st.rerun()
+        
+        # Display cached results if available
+        if st.session_state.tab2_figs is not None:
+            for tenor, fig in st.session_state.tab2_figs.items():
+                st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Select an index and click **Plot Rolling Returns**.")
 
 # --- Tab 3: Top Performers ---
 with tab3:
     st.subheader("Top Performers Across All Sectors")
+    
+    # Initialize session state for tab3
+    if "tab3_top_performers" not in st.session_state:
+        st.session_state.tab3_top_performers = None
+    if "tab3_sector_summary" not in st.session_state:
+        st.session_state.tab3_sector_summary = None
+    if "tab3_periods" not in st.session_state:
+        st.session_state.tab3_periods = None
+    if "tab3_top_n" not in st.session_state:
+        st.session_state.tab3_top_n = 100
     
     # Left column for inputs
     col1, col2 = st.columns([1, 3])
@@ -1502,16 +1536,24 @@ with tab3:
                         # Get sector summary
                         sector_summary = get_sector_summary(top_performers, all_returns, top_n)
                         
-                        # Display top performers and sector summary for each period
-                        for period in selected_periods:
-                            if period in top_performers:
-                                st.markdown(f"#### Top {top_n} Performers - {period}")
-                                st.dataframe(top_performers[period], use_container_width=True)
+                        # Cache in session state
+                        st.session_state.tab3_top_performers = top_performers
+                        st.session_state.tab3_sector_summary = sector_summary
+                        st.session_state.tab3_periods = selected_periods
+                        st.session_state.tab3_top_n = top_n
+                        st.rerun()
+        
+        # Display cached results if available
+        if st.session_state.tab3_top_performers is not None:
+            for period in st.session_state.tab3_periods:
+                if period in st.session_state.tab3_top_performers:
+                    st.markdown(f"#### Top {st.session_state.tab3_top_n} Performers - {period}")
+                    st.dataframe(st.session_state.tab3_top_performers[period], use_container_width=True)
                                 
-                                # Display sector summary
-                                if period in sector_summary:
-                                    st.markdown(f"**Sector Summary - {period}**")
-                                    st.dataframe(sector_summary[period], use_container_width=True)
-                                st.markdown("---")
+                    # Display sector summary
+                    if st.session_state.tab3_sector_summary is not None and period in st.session_state.tab3_sector_summary:
+                        st.markdown(f"**Sector Summary - {period}**")
+                        st.dataframe(st.session_state.tab3_sector_summary[period], use_container_width=True)
+                    st.markdown("---")
         else:
             st.info("Select the number of top performers and periods, then click **Find Top Performers**.")
