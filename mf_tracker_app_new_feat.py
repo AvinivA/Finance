@@ -158,7 +158,7 @@ LARGE_CAP = {
         "DSP Large Cap Fund - Direct Plan - Growth": "DSP Largecap",
         "BANDHAN Large Cap Fund-Direct Plan-Growth": "Bandhan Largecap",
         "ICICI Prudential Large Cap Fund (erstwhile Bluechip Fund) - Direct Plan - Growth": "ICICI Largecap",
-        "WhiteOak Capital Large Cap Fund Regular Plan Growth": "WhiteOak Capital Largecap",
+        "WhiteOak Capital Large Cap Fund Direct Plan Growth": "WhiteOak Capital Largecap",
         "BARODA BNP PARIBAS LARGE CAP Fund - Direct Plan - Growth Option": "Baroda BNP Largecap",
         "BANK OF INDIA Large Cap Fund Direct Plan Growth": "BoI Largecap",
         "Edelweiss Large Cap Fund - Direct Plan-Growth option": "Edelweiss Largecap",
@@ -178,7 +178,14 @@ LARGE_CAP = {
         "PGIM India Large Cap Fund - Direct Plan - Growth": "PGIM Largecap",
         "Sundaram Large Cap Fund (Formerly Known as Sundaram Blue Chip Fund)Direct Plan - Growth": "Sundaram Largecap",
         "Axis Large Cap Fund - Direct Plan - Growth": "Axis Largecap",
-        "Motilal Oswal Large Cap Direct Plan Growth": "Motilal Oswal Largecap"
+        "Motilal Oswal Large Cap Direct Plan Growth": "Motilal Oswal Largecap",
+        'JioBlackRock Large Cap Fund - Direct Plan - Growth Option': "Jio Blackrock Largecap",
+        'Aditya Birla Sun Life Large Cap Fund - Growth - Direct Plan': "Aditya Birla Largecap",
+        'BAJAJ FINSERV LARGE CAP FUND - DIRECT PLAN - GROWTH': "Bajaj Finserv Largecap",
+        "LIC MF Large Cap Fund-Direct Plan-Growth": "LIC Largecap",
+        "Parag Parikh Large Cap Fund - Direct Plan - Growth": "Parag Parikh Largecap",
+        "Samco Large Cap Fund - Direct Plan - Growth Option": "Samco Largecap",
+        "Taurus Large Cap Fund - Direct Plan - Growth": "Taurus Largecap"
     }
 }
 
@@ -211,7 +218,10 @@ MID_CAP = {
         "quant Mid Cap Fund - Growth Option - Direct Plan": "Quant Midcap",
         "PGIM India Midcap Fund - Direct Plan - Growth Option": "PGIM Midcap",
         "Helios Mid Cap Fund - Direct Plan - Growth Option": "Helios Midcap",
-        "Bank of India Mid Cap Fund - Direct Plan Growth": "BoI Midcap"
+        "Bank of India Mid Cap Fund - Direct Plan Growth": "BoI Midcap",
+        'LIC MF Mid Cap Fund-Direct Plan-Growth': "LIC Midcap",
+        'Taurus Mid Cap Fund - Direct Plan - Growth': "Taurus Midcap",
+        'TRUSTMF MID CAP FUND -DIRECT -GROWTH' : "TrustMF Midcap",
     }
 }
 
@@ -242,7 +252,16 @@ SMALL_CAP = {
         "PGIM India Small Cap Fund - Direct Plan- Growth Option":"PGIM Smallcap",
         "UTI Small Cap Fund - Direct Plan - Growth Option":"UTI Smallcap",
         "JM Small Cap Fund (Direct) - Growth Option":"JM Smallcap",
-        "Mahindra Manulife Small Cap Fund - Direct Plan - Growth":"Mahindra Manulife Smallcap"
+        "Mahindra Manulife Small Cap Fund - Direct Plan - Growth":"Mahindra Manulife Smallcap",
+        'Abakkus Small Cap Fund - Direct Plan - Growth':"Abakkus Smallcap",
+        'Aditya Birla Sun Life Small Cap Fund - Growth - Direct Plan':"Aditya Birla Smallcap",
+        'BAJAJ FINSERV SMALL CAP FUND - DIRECT - GROWTH':"Bajaj Finserv Smallcap",
+        'Groww Small Cap Fund-Direct-Growth': "Groww Smallcap",
+        'Kotak-Small Cap Fund - Growth - Direct': "Kotak Smallcap",
+        'LIC MF Small Cap Fund-Direct Plan-Growth': "LIC Smallcap",
+        'SBI Small Cap Fund - Direct Plan - Growth': "SBI Smallcap",
+        'The Wealth Company Small Cap Fund- Direct-Growth' : "Wealthcomp Smallcap",
+        'TRUSTMF SMALL CAP FUND -DIRECT PLAN-GROWTH' : "TrustMF Smallcap",
     }
 }
 

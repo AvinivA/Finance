@@ -243,7 +243,16 @@ SMALL_CAP = {
         "PGIM India Small Cap Fund - Direct Plan- Growth Option":"PGIM Smallcap",
         "UTI Small Cap Fund - Direct Plan - Growth Option":"UTI Smallcap",
         "JM Small Cap Fund (Direct) - Growth Option":"JM Smallcap",
-        "Mahindra Manulife Small Cap Fund - Direct Plan - Growth":"Mahindra Manulife Smallcap"
+        "Mahindra Manulife Small Cap Fund - Direct Plan - Growth":"Mahindra Manulife Smallcap",
+        'Abakkus Small Cap Fund - Direct Plan - Growth':"Abakkus Smallcap",
+        'Aditya Birla Sun Life Small Cap Fund - Growth - Direct Plan':"Aditya Birla Smallcap",
+        'BAJAJ FINSERV SMALL CAP FUND - DIRECT - GROWTH':"Bajaj Finserv Smallcap",
+        'Groww Small Cap Fund-Direct-Growth': "Groww Smallcap",
+        'Kotak-Small Cap Fund - Growth - Direct': "Kotak Smallcap",
+        'LIC MF Small Cap Fund-Direct Plan-Growth': "LIC Smallcap",
+        'SBI Small Cap Fund - Direct Plan - Growth': "SBI Smallcap",
+        'The Wealth Company Small Cap Fund- Direct-Growth' : "Wealthcomp Smallcap",
+        'TRUSTMF SMALL CAP FUND -DIRECT PLAN-GROWTH' : "TrustMF Smallcap",
     }
 }
 
