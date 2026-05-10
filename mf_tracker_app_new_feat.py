@@ -1009,30 +1009,32 @@ def fetch_benchmark_index_data(
 
 def compute_index_funds_returns(index_dict):
     all_returns_df = pd.DataFrame()
-
     for x,y in index_dict.items():
         if x == "Benchmark":
-            for idx in y:
-                #print(idx)
-                ret_df = fetch_benchmark_index_data(ticker=idx)
-                rolling_ret_df = hybrid_returns_table(
-                    df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
-                    periods=ROLLING_RETURN_PERIODS,
-                    name=idx,
-                    nav_col="CLOSE",
-                    date_format="%d %b %Y"
-                )
+            try:
+                for idx in y:
+                    #print(idx)
+                    ret_df = fetch_benchmark_index_data(ticker=idx)
+                    rolling_ret_df = hybrid_returns_table(
+                        df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
+                        periods=ROLLING_RETURN_PERIODS,
+                        name=idx,
+                        nav_col="CLOSE",
+                        date_format="%d %b %Y"
+                    )
 
-                pp_ret_df = compute_period_returns(
-                    df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
-                    periods=POINT_TO_POINT_RETURN_PERIODS,
-                    name=idx,
-                    nav_col="CLOSE",
-                    date_format="%d %b %Y"
-                )
-                ret_df =  pd.concat([rolling_ret_df, pp_ret_df], axis=1)                
-                all_returns_df = pd.concat([all_returns_df,ret_df])
-        
+                    pp_ret_df = compute_period_returns(
+                        df=ret_df[["HistoricalDate", "CLOSE"]].set_index("HistoricalDate"),
+                        periods=POINT_TO_POINT_RETURN_PERIODS,
+                        name=idx,
+                        nav_col="CLOSE",
+                        date_format="%d %b %Y"
+                    )
+                    ret_df =  pd.concat([rolling_ret_df, pp_ret_df], axis=1)                
+                    all_returns_df = pd.concat([all_returns_df,ret_df])
+            except Exception as e:
+                print(f"Skipping benchmark index {idx}. Error occurred while processing: {e}")
+
         elif x == "Funds":
             for fund_name, norm_name in y.items():
                 #print(fund_name)
