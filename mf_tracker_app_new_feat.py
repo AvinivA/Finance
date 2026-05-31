@@ -1292,7 +1292,7 @@ def compute_all_funds_returns(sector_dict_map: dict, periods: List[str] = ["3M",
             )
             
             # Add sector information to the fund name for tracking
-            ret_df.index = [f"{norm_name} ({sector_name})"]
+            ret_df.index = [f"({sector_name}) {norm_name}"]
             
             return ret_df
             
@@ -1379,7 +1379,7 @@ def get_sector_summary(top_performers: dict, all_returns_df: pd.DataFrame, top_n
     total_funds_per_sector = {}
     for fund_name in all_returns_df.index:
         if "(" in fund_name and ")" in fund_name:
-            sector = fund_name.split("(")[-1].replace(")", "").strip()
+            sector = fund_name.split(")")[0].replace("(", "").strip()
         else:
             sector = "Unknown"
         
@@ -1397,7 +1397,7 @@ def get_sector_summary(top_performers: dict, all_returns_df: pd.DataFrame, top_n
         for fund_name in top_df.index:
             # Parse sector from fund name
             if "(" in fund_name and ")" in fund_name:
-                sector = fund_name.split("(")[-1].replace(")", "").strip()
+                sector = fund_name.split(")")[0].replace("(", "").strip()
             else:
                 sector = "Unknown"
             
