@@ -717,6 +717,18 @@ AUTO = {
     }
 }
 
+DEFENCE = {
+    "Benchmark": ['NIFTY IND DEFENCE'],
+    "Funds": {
+            'HDFC Defence Fund - Growth Option - Direct Plan': "HDFC Defence",
+            'Groww Nifty India Defence ETF FOF - Direct Growth': "Groww NIFTY Defence",
+            'Mirae Asset BSE India Defence ETF FOF - Direct Plan - Growth': "Mirae Asset BSE Defence",
+            'Aditya Birla Sun Life Nifty India Defence Index Fund-Direct Growth': "Aditya Birla NIFTY Defence",
+            'Axis Nifty India Defence Index Fund - Direct Plan - Growth': "Axis NIFTY Defence",
+            'Motilal Oswal Nifty India Defence Index Fund Direct Plan Growth': "Motilal NIFTY Defence"
+    }
+}
+
 SECTOR_DICT_MAP = {
     "MULTI_CAP":MULTI_CAP,
     "SMALL_CAP":SMALL_CAP,
@@ -743,6 +755,7 @@ SECTOR_DICT_MAP = {
     "SPECIAL_OPP":SPECIAL_OPP, # new
     "TRANSP":TRANSP, # new
     "AUTO":AUTO, # new
+    "DEFENCE":DEFENCE, # new
     "ARBITRAGE":ARBITRAGE,
     "EQ_SAVING":EQ_SAVING
 }
